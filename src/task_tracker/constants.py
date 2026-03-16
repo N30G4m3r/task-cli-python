@@ -24,8 +24,13 @@ STATUS = "status"
 CREATED_AT = "created_at"
 UPDATE_AT = "updated_at"
 
-# Comando del CRUD
+# Comandos del CRUD
+COMMAND = "command"
 ADD = "add"
 LIST = "list"
 UPDATE = "update"
 DELETE = "delete"
+
+# Constantes de lectura y escritura de JSON
+READING = "r"
+WRITING = "w"
