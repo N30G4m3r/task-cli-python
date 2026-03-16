@@ -24,7 +24,7 @@ def load_tasks(file_path="tasks.json"):
         # Abrimos el archivo en modo lectura
         with open(file_path, "r") as file:
             # Cargamos las tareas desde el archivo y las retornamos como una lista de diccionarios
-            return json.lFad(file)
+            return json.load(file)
 
     # Si ocurre un error al cargar, lo mostramos y salimos con un código de error
     except Exception as e:
