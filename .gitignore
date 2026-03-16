@@ -8,3 +8,6 @@ wheels/
 
 # Virtual environments
 .venv
+
+# JSON files of tasks
+tasks.json

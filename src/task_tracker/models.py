@@ -2,9 +2,8 @@ import datetime
 
 # Definición de la estructura de la Tarea
 class Task:
-    def __init__(self, id, title, description, status="todo"):
+    def __init__(self, id, description, status="todo"):
         self.id = id
-        self.title = title
         self.description = description
         self.status = status # todo, in-progress, done
         self.created_at = datetime.datetime.now().isoformat()
