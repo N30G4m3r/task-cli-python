@@ -1,10 +1,11 @@
 import datetime
+from .constants import STATUS_TODO
 
 
 # Definición de la estructura de la Tarea
 class Task:
     # Constructor para inicializar una tarea con ID, descripción, estado y timestamps
-    def __init__(self, id, description, status="todo"):
+    def __init__(self, id, description, status=STATUS_TODO):
         self.id = id  # ID único de la tarea
         self.description = description  # Descripción de la tarea
         self.status = status  # todo, in-progress, done
