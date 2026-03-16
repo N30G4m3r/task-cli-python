@@ -53,14 +53,14 @@ def main():
         task_id = manager.add_task(args.description)
         print(f"{GREEN}✓{RESET} {BOLD}Task added successfully{RESET} (ID: {task_id})")
     elif args.command == "list":
-        tasks = manager.list_tasks()
-        print(f"{YELLOW}{BOLD}Listing tasks{RESET}")
-        prin
+        tasks = manager.list_tasks(args.status)
+        print(f"{YELLOW}{BOLD}Listing tasks{RESET} ({len(tasks)} total){RESET}")
+        print(f"{YELLOW}-----------------------{RESET}")
         if len(tasks) > 0:
             print(f"{BOLD}ID - Description: (Status){RESET}")
         else:
-            print("No tasks found.")
-        for task in manager.list_tasks(args.status):
+            print(f"{YELLOW}No tasks found.{RESET}")
+        for task in tasks:
             print(f"{task['id']} - {task['description']}: ({task['status']})")
     elif args.command == "update":
         success = manager.update_task(
