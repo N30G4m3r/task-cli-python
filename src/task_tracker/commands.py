@@ -1,5 +1,16 @@
 from .manager import TaskManager
-from .constants import GREEN, RED, YELLOW, BOLD, RESET, STATUS_IN_PROGRESS, STATUS_DONE
+from .constants import (
+    GREEN,
+    RED,
+    YELLOW,
+    BOLD,
+    RESET,
+    STATUS_IN_PROGRESS,
+    STATUS_DONE,
+    ID,
+    DESCRIPTION,
+    STATUS,
+)
 
 # Lógica de la interfaz (Mensajes, colores, prints)
 # Inicializamos el TaskManager para usarlo en los comandos
@@ -52,7 +63,7 @@ def run_list(args):
 
     # Iteramos sobre cada tarea en la lista de tareas y mostramos su ID, descripción y estado formateados
     for task in tasks:
-        print(f"{task['id']} - {task['description']}: ({task['status']})")
+        print(f"{task[ID]} - {task[DESCRIPTION]}: ({task[STATUS]})")
 
     # Retornamos la lista de tareas para uso posterior o confirmación
     return tasks
