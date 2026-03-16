@@ -15,7 +15,7 @@ class TaskManager:
     # Método para agregar una nueva tarea con una descripción dada
     def add_task(self, description):
         # Generamos un nuevo ID para la tarea basado en la cantidad de tareas existentes (simple pero efectivo para este caso)
-        new_id = len(self.tasks) + 1
+        new_id = max([t['id'] for t in self.tasks], default=0) + 1
         # Creamos una nueva instancia de Task con el nuevo ID y la descripción proporcionada
         task = Task(new_id, description)
         # Agregamos la tarea a la lista de tareas
