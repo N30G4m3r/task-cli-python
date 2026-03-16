@@ -1,14 +1,7 @@
 from .manager import TaskManager
+from .constants import GREEN, RED, YELLOW, BOLD, RESET, STATUS_IN_PROGRESS, STATUS_DONE
 
 # Lógica de la interfaz (Mensajes, colores, prints)
-
-# Definimos los colores aquí o impórtalos de un archivo de constantes
-GREEN = "\033[32m"
-RED = "\033[31m"
-YELLOW = "\033[33m"
-BOLD = "\033[1m"
-RESET = "\033[0m"
-
 # Inicializamos el TaskManager para usarlo en los comandos
 manager = TaskManager()
 
@@ -132,7 +125,7 @@ def run_in_progress(args):
         return
 
     # Intentamos actualizar el estado de la tarea a "in-progress" usando el método update_task del TaskManager, pasando el ID de la tarea a actualizar y el nuevo estado como argumentos
-    success = manager.update_task(args.id, status="in-progress")
+    success = manager.update_task(args.id, status=STATUS_IN_PROGRESS)
 
     # Si la actualización no fue exitosa (por ejemplo, si no se encontró la tarea con el ID especificado), mostramos un mensaje de error indicando que no se pudo marcar la tarea como en progreso
     if not success:
@@ -159,7 +152,7 @@ def run_done(args):
         return
 
     # Intentamos actualizar el estado de la tarea a "done" usando el método update_task del TaskManager, pasando el ID de la tarea a actualizar y el nuevo estado como argumentos
-    success = manager.update_task(args.id, status="done")
+    success = manager.update_task(args.id, status=STATUS_DONE)
 
     # Si la actualización no fue exitosa (por ejemplo, si no se encontró la tarea con el ID especificado), mostramos un mensaje de error indicando que no se pudo marcar la tarea como hecha
     if not success:
