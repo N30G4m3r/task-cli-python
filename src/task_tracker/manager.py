@@ -1,12 +1,13 @@
 import datetime
 from .storage import load_tasks, save_tasks
 from .models import Task
+from .constants import DB_FILE
 
 
 # Lógica de negocio (CRUD de tareas)
 class TaskManager:
     # Constructor para inicializar el TaskManager con la ruta del archivo de tareas y cargar las tareas existentes
-    def __init__(self, file_path="tasks.json"):
+    def __init__(self, file_path=DB_FILE):
         # Guardamos la ruta del archivo de tareas para usarla en las operaciones de carga y guardado
         self.file_path = file_path
         # Cargamos las tareas existentes en una lista
