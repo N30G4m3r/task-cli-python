@@ -1,7 +1,7 @@
 import datetime
 from .storage import load_tasks, save_tasks
 from .models import Task
-from .constants import DB_FILE
+from .constants import DB_FILE, ID, STATUS, DESCRIPTION, UPDATE_AT
 
 
 # Lógica de negocio (CRUD de tareas)
@@ -16,7 +16,7 @@ class TaskManager:
     # Método para agregar una nueva tarea con una descripción dada
     def add_task(self, description):
         # Generamos un nuevo ID para la tarea basado en la cantidad de tareas existentes (simple pero efectivo para este caso)
-        new_id = max([t['id'] for t in self.tasks], default=0) + 1
+        new_id = max([t[ID] for t in self.tasks], default=0) + 1
         # Creamos una nueva instancia de Task con el nuevo ID y la descripción proporcionada
         task = Task(new_id, description)
         # Agregamos la tarea a la lista de tareas
@@ -37,7 +37,7 @@ class TaskManager:
             return self.tasks
 
         # Retornamos solo las tareas que coinciden con el estado especificado
-        return [task for task in self.tasks if task["status"] == status]
+        return [task for task in self.tasks if task[STATUS] == status]
 
     # Método para actualizar una tarea existente dado su ID, con una nueva descripción y/o un nuevo estado
     def update_task(self, task_id, description=None, status=None):
@@ -50,15 +50,15 @@ class TaskManager:
         # Buscamos la tarea por su ID y actualizamos los campos proporcionados
         for task in self.tasks:
             # Si encontramos la tarea con el ID especificado, actualizamos su descripción y/o estado según lo proporcionado
-            if task["id"] == task_id:
+            if task[ID] == task_id:
                 # Si se proporciona una nueva descripción, la actualizamos en la tarea
                 if description:
-                    task["description"] = description
+                    task[DESCRIPTION] = description
                 # Si se proporciona un nuevo estado, lo actualizamos en la tarea
                 if status:
-                    task["status"] = status
+                    task[STATUS] = status
                 # Actualizamos el timestamp de última actualización de la tarea
-                task["updated_at"] = datetime.datetime.now().isoformat()
+                task[UPDATE_AT] = datetime.datetime.now().isoformat()
                 # Guardamos la lista actualizada de tareas en el archivo JSON para persistencia
                 save_tasks(self.tasks, self.file_path)
                 # Retornamos True para indicar que la tarea fue actualizada exitosamente
@@ -73,7 +73,7 @@ class TaskManager:
             return False  # No hay tareas para eliminar
 
         # Filtramos la lista de tareas para eliminar la tarea con el ID especificado
-        self.tasks = [task for task in self.tasks if task["id"] != task_id]
+        self.tasks = [task for task in self.tasks if task[ID] != task_id]
 
         # Si la longitud de la lista de tareas después del filtrado es menor que la longitud original, significa que se eliminó una tarea
         if len(self.tasks) < original_length:
