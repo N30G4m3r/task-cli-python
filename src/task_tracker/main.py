@@ -1,103 +1,95 @@
 import argparse
-from .manager import TaskManager
-# from . import __version__
+from . import commands
+from .constants import (
+    COMMAND,
+    ADD,
+    LIST,
+    UPDATE,
+    DELETE,
+    ID,
+    DESCRIPTION,
+    STATUS,
+    STATUS_TODO,
+    STATUS_IN_PROGRESS,
+    STATUS_DONE,
+)
 
-# Códigos de color ANSI
-RED = "\033[31m"
-GREEN = "\033[32m"
-YELLOW = "\033[33m"
-BOLD = "\033[1m"
-RESET = "\033[0m"
 
 # Punto de entrada (Argparse)
 def main():
-    manager = TaskManager()
     parser = argparse.ArgumentParser(description="A simple task CLI in Python")
-    subparsers = parser.add_subparsers(dest="command")
-
-    # Comando para mostrar la versión
-    # version_parser = subparsers.add_parser("version", help="Show the version of the application")
+    subparsers = parser.add_subparsers(dest=COMMAND)
 
     # Comando para agregar una tarea
-    add_parser = subparsers.add_parser("add", help="Add a new task")
-    add_parser.add_argument("description", type=str, help="Description of the task") # required positional argument to specify the task description
-    
+    add_parser = subparsers.add_parser(ADD, help="Add a new task")
+    # El argumento "description" es un argumento posicional requerido para el comando "add", que especifica la descripción de la tarea a agregar
+    add_parser.add_argument(DESCRIPTION, type=str, help="Description of the task")
+
     # Comando para listar tareas
-    list_parser = subparsers.add_parser("list", help="List all tasks")
-    list_parser.add_argument("status", nargs="?", choices=["todo", "in-progress", "done"], help="Filter tasks by status") # optional argument to filter by status
+    list_parser = subparsers.add_parser(LIST, help="List all tasks")
+    # El argumento "status" es un argumento opcional para el comando "list", que permite filtrar las tareas por su estado (todo, in-progress, done)
+    list_parser.add_argument(
+        STATUS,
+        nargs="?",
+        choices=[STATUS_TODO, STATUS_IN_PROGRESS, STATUS_DONE],
+        help="Filter tasks by status",
+    )
 
     # Comando para actualizar una tarea
-    update_parser = subparsers.add_parser("update", help="Update an existing task")
-    update_parser.add_argument("id", type=int, help="ID of the task to update") # required positional argument to specify which task to update
-    update_parser.add_argument("--description", type=str, help="New description for the task") # optional argument to update the description
-    # update_parser.add_argument("--status", type=str, choices=["todo", "in-progress", "done"], help="New status for the task")
+    update_parser = subparsers.add_parser(UPDATE, help="Update an existing task")
+    update_parser.add_argument(
+        ID, type=int, help="ID of the task to update"
+    )  # required positional argument to specify which task to update
+    update_parser.add_argument(
+        f"--{DESCRIPTION}", type=str, help="New description for the task"
+    )  # optional argument to update the description
+    update_parser.add_argument(
+        f"--{STATUS}",
+        type=str,
+        choices=[STATUS_TODO, STATUS_IN_PROGRESS, STATUS_DONE],
+        help="New status for the task",
+    )
 
     # Comando para eliminar una tarea
-    delete_parser = subparsers.add_parser("delete", help="Delete a task")
-    delete_parser.add_argument("id", type=int, help="ID of the task to delete") # required positional argument to specify which task to delete
+    delete_parser = subparsers.add_parser(DELETE, help="Delete a task")
+    delete_parser.add_argument(
+        ID, type=int, help="ID of the task to delete"
+    )  # required positional argument to specify which task to delete
 
     # Comando para marca una tarea en progreso
-    in_progress_parser = subparsers.add_parser("in-progress", help="Mark a task as in-progress")
-    in_progress_parser.add_argument("id", type=int, help="ID of the task to mark as in-progress") # required positional argument to specify which task to mark    
+    in_progress_parser = subparsers.add_parser(
+        STATUS_IN_PROGRESS, help="Mark a task as in-progress"
+    )
+    in_progress_parser.add_argument(
+        ID, type=int, help="ID of the task to mark as in-progress"
+    )  # required positional argument to specify which task to mark
 
     # Comando para marcar una tarea como hecha
-    done_parser = subparsers.add_parser("done", help="Mark a task as done")
-    done_parser.add_argument("id", type=int, help="ID of the task to mark as done") # required positional argument to specify which task to mark
+    done_parser = subparsers.add_parser(STATUS_DONE, help="Mark a task as done")
+    done_parser.add_argument(
+        ID, type=int, help="ID of the task to mark as done"
+    )  # required positional argument to specify which task to mark
 
     args = parser.parse_args()
 
-    if args.command == "add":
-        if not args.description:
-            print(f"{RED}✗{RESET} {BOLD}Error: Description is required to add a task.{RESET}")
-            return
-        task_id = manager.add_task(args.description)
-        print(f"{GREEN}✓{RESET} {BOLD}Task added successfully{RESET} (ID: {task_id})")
-    elif args.command == "list":
-        tasks = manager.list_tasks(args.status)
-        print(f"{YELLOW}{BOLD}Listing tasks{RESET} ({len(tasks)} total){RESET}")
-        print(f"{YELLOW}-----------------------{RESET}")
-        if len(tasks) > 0:
-            print(f"{BOLD}ID - Description: (Status){RESET}")
-        else:
-            print(f"{YELLOW}No tasks found.{RESET}")
-        for task in tasks:
-            print(f"{task['id']} - {task['description']}: ({task['status']})")
-    elif args.command == "update":
-        success = manager.update_task(
-            task_id=args.id,
-            description=args.description,
-            status=args.status
-        )
-        if  success:
-            print(f"{GREEN}✓{RESET} {BOLD}Task updated successfully{RESET} (ID: {args.id})")
-        else:
-            print(f"{RED}✗{RESET} {BOLD}Error: Task with ID {args.id} not found.{RESET}") 
-    elif args.command == "delete":
-        success = manager.delete_task(args.id)
-        if success:
-            print(f"{GREEN}✓{RESET} {BOLD}Task deleted successfully{RESET} (ID: {args.id})")
-        else:
-            print(f"{RED}✗{RESET} {BOLD}Error: Task with ID {args.id} not found.{RESET}")
-    elif args.command == "in-progress":
-        success = manager.update_task(
-            task_id=args.id,
-            status="in-progress"
-        )
-        if success:
-            print(f"{GREEN}✓{RESET} {BOLD}Task marked as in-progress successfully{RESET} (ID: {args.id})")
-        else:
-            print(f"{RED}✗{RESET} {BOLD}Error: Task with ID {args.id} not found.{RESET}")
-    elif args.command == "done":
-        success = manager.update_task(
-            task_id=args.id,
-            status="done"
-        )
-        if success:
-            print(f"{GREEN}✓{RESET} {BOLD}Task marked as done successfully{RESET} (ID: {args.id})")
-        else:
-            print(f"{RED}✗{RESET} {BOLD}Error: Task with ID {args.id} not found.{RESET}")
+    # Mapa de Comandos
+    command_map = {
+        ADD: commands.run_add,
+        LIST: commands.run_list,
+        UPDATE: commands.run_update,
+        DELETE: commands.run_delete,
+        STATUS_IN_PROGRESS: commands.run_in_progress,
+        STATUS_DONE: commands.run_done,
+    }
+
+    #
+    handler = command_map.get(args.command)
+
+    if handler:
+        handler(args)
     else:
         parser.print_help()
+
 
 if __name__ == "__main__":
     main()
