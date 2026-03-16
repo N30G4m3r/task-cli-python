@@ -1,19 +1,13 @@
 import json
 import os
-
-# Códigos de color ANSI
-RED = "\033[31m"
-GREEN = "\033[32m"
-YELLOW = "\033[33m"
-BOLD = "\033[1m"
-RESET = "\033[0m"
+from .constants import RED, BOLD, RESET, DB_FILE
 
 # Persistencia (Lectura/Escritura JSON)
 # Funciones para cargar y guardar tareas en un archivo JSON
 
 
 # Función para cargar tareas desde un archivo JSON
-def load_tasks(file_path="tasks.json"):
+def load_tasks(file_path=DB_FILE):
     # Si el archivo no existe, retornamos una lista vacía
     if not os.path.exists(file_path):
         # Si el archivo existe, intentamos cargar las tareas desde él
@@ -35,7 +29,7 @@ def load_tasks(file_path="tasks.json"):
 
 
 # Función para guardar tareas en un archivo JSON
-def save_tasks(tasks, file_path="tasks.json"):
+def save_tasks(tasks, file_path=DB_FILE):
     # Guardamos la lista de tareas en formato JSON en el archivo especificado
     try:
         # Abrimos el archivo en modo escritura
