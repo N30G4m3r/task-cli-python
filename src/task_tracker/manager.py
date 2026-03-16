@@ -16,7 +16,11 @@ class TaskManager:
         # Retornamos el ID para confirmación
         return task.id
 
-    def list_tasks(self):
+    def list_tasks(self, status=None):
+        if not self.tasks:
+            return []
+        if status:
+            return [task for task in self.tasks if task["status"] == status]
         return self.tasks
 
     def update_task(self, task_id, description=None, status=None):
