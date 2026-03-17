@@ -44,7 +44,7 @@ class TaskManager:
         tasks_length = len(self.tasks)
         if tasks_length == 0:
             return False  # No hay tareas para actualizar
-        if not description and not status:
+        if (not description or description.strip() == "") and (not status or status.strip() == ""):
             return False  # No se proporcionó nada para actualizar
 
         # Buscamos la tarea por su ID y actualizamos los campos proporcionados
