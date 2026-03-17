@@ -1,13 +1,24 @@
 # Python-generated files
 __pycache__/
 *.py[oc]
+*$py.class
 build/
 dist/
 wheels/
 *.egg-info
 
+
 # Virtual environments
 .venv
+.venv/
+venv/
 
-# JSON files of tasks
+# App Data (No queremos subir tus tareas reales ni de test)
 tasks.json
+test_tasks.json
+integration_tasks.json
+test_storage.json
+
+# Herramientas
+.uv/
+.pytest_cache/
