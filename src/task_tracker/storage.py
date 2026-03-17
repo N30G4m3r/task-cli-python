@@ -21,11 +21,10 @@ def load_tasks(file_path=DB_FILE):
             return json.load(file)
 
     # Si ocurre un error al cargar, lo mostramos y salimos con un código de error
-    except Exception as e:
-        # Mostramos el error en rojo y negrita
-        print(f"{RED}✗{RESET} {BOLD}Error loading tasks: {e}{RESET}")
-        # Salimos con un código de error para indicar que algo salió mal
-        exit(1)
+    except (json.JSONDecodeError, IOError):
+        # Aquí es donde manejamos el archivo corrupto
+        print(f"{RED}✗{RESET} {BOLD}Error loading tasks{RESET}")
+        return []
 
 
 # Función para guardar tareas en un archivo JSON
