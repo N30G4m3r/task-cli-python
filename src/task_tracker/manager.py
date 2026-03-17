@@ -15,14 +15,22 @@ class TaskManager:
 
     # Método para agregar una nueva tarea con una descripción dada
     def add_task(self, description):
+        # Validación: Si no hay descripción o son solo espacios, lanzamos un error o devolvemos None
+        if not description or description.strip() == "":
+            return None  # Devolvemos None para indicar que no se creó nada
+        
         # Generamos un nuevo ID para la tarea basado en la cantidad de tareas existentes (simple pero efectivo para este caso)
         new_id = max([t[ID] for t in self.tasks], default=0) + 1
+
         # Creamos una nueva instancia de Task con el nuevo ID y la descripción proporcionada
         task = Task(new_id, description)
+
         # Agregamos la tarea a la lista de tareas
         self.tasks.append(task.to_dict())
+
         # Guardamos la lista actualizada de tareas en el archivo JSON para persistencia
         save_tasks(self.tasks, self.file_path)
+        
         # Retornamos el ID para confirmación
         return task.id
 
